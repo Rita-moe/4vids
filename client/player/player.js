@@ -56,7 +56,7 @@ class Player {
       return
     }
 
-    const collect = collector(res.data.webms)
+    const collect = collector(res.data.videos)
 
     this._webmUrls = collect('url')
     this._filenames = collect('filename')

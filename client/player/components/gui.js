@@ -94,7 +94,7 @@ class GUI {
 
     this._player.state.on('change', (state) => {
       status.innerHTML = `${state.index + 1} / ${state.total}`
-      filename.innerHTML = `${state.title}.webm`
+      filename.innerHTML = `${state.title}`
       filename.href = state.url
       loop.checked = state.loop
     })

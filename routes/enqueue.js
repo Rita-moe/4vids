@@ -4,7 +4,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const { Router } = require('express')
 const download = require('download')
-const listWebms = require('4chan-list-webm')
+const listVideos = require('4chan-list-videos')
 const Bottleneck = require('bottleneck')
 
 const limiter = new Bottleneck({
@@ -12,7 +12,7 @@ const limiter = new Bottleneck({
   minTime: 1000
 })
 const router = Router()
-const throttledListWebms = limiter.wrap(listWebms)
+const throttledListVideos = limiter.wrap(listVideos)
 
 async function downloadThumbnails (dir, urls) {
   await fs.ensureDir(dir)
@@ -38,12 +38,18 @@ router.get('/:board/thread/:threadNo', async (req, res) => {
   const { board, threadNo } = req.params
   const dir = path.join(__dirname, `../thumbnail/${board}/${threadNo}`)
 
-  let webmJson
+  let listJson
+  let resJson = {
+    videos: []
+  }
   let thumbnailJson
 
   try {
-    webmJson = await throttledListWebms(board, threadNo, { https: true })
-    thumbnailJson = webmJson.webms.map(webm => webm.thumbnail)
+    listJson = await throttledListVideos(board, threadNo, { https: true })
+    thumbnailJson = [
+      ...listJson.mp4s.map(mp4 => mp4.thumbnail),
+      ...listJson.webms.map(webm => webm.thumbnail)
+    ]
   } catch (err) {
     res.status(404).send(err.message)
 
@@ -56,12 +62,25 @@ router.get('/:board/thread/:threadNo', async (req, res) => {
     console.error(`Failed to download thumbnails: ${err}`)
   }
 
-  webmJson.webms.forEach((webm) => {
-    webm.url = `/proxy/${encodeURIComponent(webm.url)}?f=${encodeURIComponent(webm.filename)}`
+  listJson.webms.forEach((webm) => {
+    webm.url = `/proxy/${encodeURIComponent(webm.url)}?ext=webm&f=${encodeURIComponent(webm.filename)}`
     webm.thumbnail = webm.thumbnail.replace(reg, `/thumbnail/${board}/${threadNo}/$2`)
+    webm.filename = `${webm.filename}.webm`
+    resJson.videos.push(webm)
   })
 
-  res.json(webmJson)
+  listJson.mp4s.forEach((mp4) => {
+    mp4.url = `/proxy/${encodeURIComponent(mp4.url)}?ext=mp4&f=${encodeURIComponent(mp4.filename)}`
+    mp4.thumbnail = mp4.thumbnail.replace(reg, `/thumbnail/${board}/${threadNo}/$2`)
+    mp4.filename = `${mp4.filename}.mp4`
+    resJson.videos.push(mp4)
+  })
+
+  if (listJson.subject) {
+    resJson.subject = listJson.subject
+  }
+
+  res.json(resJson)
 })
 
 module.exports = router

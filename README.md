@@ -14,7 +14,7 @@
 <p align="center">Well, now you can :wink:</p>
 <p align="center"><a href="https://www.4webm.org">https://www.4webm.org</a></p><br /><br />
 
-<p align="center"><b><a href="4webm.org">4webm</a> is a web application that loads all webms from a 4chan thread into a playlist.</b></p>
+<p align="center"><b><a href="4webm.org">4webm</a> is a web application that loads all webms (and mp4s!) from a 4chan thread into a playlist.</b></p>
 
 Given any arbitrary 4chan thread URL, you can load it by replacing "4chan" with "4webm". For example, https://boards.4webm.org/wsg/thread/2036111
 

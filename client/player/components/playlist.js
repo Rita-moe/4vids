@@ -22,7 +22,7 @@ class Playlist {
       const $div = document.createElement('div')
       const num = i + 1
 
-      $a.innerHTML = `${num}. ${filename}.webm`
+      $a.innerHTML = `${num}. ${filename}`
       $a.className = 'webm-link'
       $a.addEventListener('click', () => handler(i))
 

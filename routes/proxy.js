@@ -7,13 +7,17 @@ const router = Router()
 
 router.get('/:url', (req, res) => {
   const url = decodeURIComponent(req.params.url)
-  const filename = decodeURIComponent(req.query.f)
+  const ext = req.query.ext || 'webm'
+  let filename = decodeURIComponent(req.query.f || 'video')
 
   axios.get(url, {
     responseType: 'stream'
   })
     .then((stream) => {
-      stream.headers['Content-Disposition'] = `attachment; filename=${filename}.webm`
+      // We need to clean the filename to prevent HTTP errors like "Invalid character in header content"
+      filename = filename.replace(/[^a-zA-Z0-9-_. ]/g, '_')
+
+      stream.headers['Content-Disposition'] = `attachment; filename=${filename}.${ext}`
       res.writeHead(stream.status, stream.headers)
       stream.data.pipe(res)
     })

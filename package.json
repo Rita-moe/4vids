@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "4chan-boards": "^2.0.0",
-    "4chan-list-webm": "^4.0.0",
+    "4chan-list-videos": "github:Rita-moe/4chan-list-videos",
     "bottleneck": "^2.0.1",
     "download": "^6.2.5",
     "express": "^4.16.2",
