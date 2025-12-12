@@ -1,0 +1,8 @@
+services:
+  app:
+    image: git.rita.moe/rita/4vids:latest
+    build: .
+    container_name: 4vids
+    restart: unless-stopped
+    ports:
+      - "49161:8080"

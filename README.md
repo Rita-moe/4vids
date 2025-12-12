@@ -63,9 +63,32 @@ Now is possible to start a 4vids container:
 docker run -p 49161:8080 --rm -d "$USER/node-4vids"
 ```
 
-To use the 4web app just go to any browser and write `http://localhost:49161`.
+To use the 4vids app just go to any browser and write `http://localhost:49161`.
 
 The container will be deleted by the command `docker container stop <CONTAINER ID (do 'docker ps' to get it.) >` or by turning off your computer. Otherwise the container will be running as a backgroud job.
+
+### Or use Docker Compose
+
+To build and run:
+```bash
+# Clone this repo
+git clone https://github.com/Rita-moe/4vids.git 
+
+# Enter the repo folder
+cd 4vids
+
+# Build the image
+docker compose build
+
+# Run the service in the background
+# => If the image isn't available locally, it will pull the latest from git.rita.moe
+docker compose up -d
+```
+
+To use the 4vids app just go to any browser and write `http://localhost:49161`.
+
+And stop the service with `docker compose down`.
+If you restart your computer and didn't stop the service, it will automatically restart when Docker loads.
 
 ## Disclaimer
 
