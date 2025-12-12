@@ -1,6 +1,6 @@
 'use strict'
 
-import * as axios from 'axios'
+import axios from 'axios'
 import boards from '4chan-boards'
 import State from './state'
 import { Remote, Speaker, Playlist, Seeker, GUI } from './components'
@@ -8,7 +8,7 @@ import { regex, collector } from '../util'
 
 class Player {
   /**
-   * Create a 4webm player
+   * Create a 4vids player
    * @param {object}  dom
    * @param {Element} dom.video
    * @param {Element} dom.playlist
@@ -75,7 +75,7 @@ class Player {
       `/${board}/`,
       res.data.subject,
       boards.getName(board),
-      '4webm'
+      '4vids'
     ].join(' - ')
     this._playlist.update(index)
     this.state.set({

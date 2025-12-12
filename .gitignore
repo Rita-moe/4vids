@@ -6,4 +6,4 @@ thumbnail/
 *.log
 TODO.md
 dump.rdb
-static/bundle.js
+static/
