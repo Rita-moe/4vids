@@ -1,6 +1,5 @@
 'use strict'
 
-import axios from 'axios'
 import boards from '4chan-boards'
 import State from './state'
 import { Remote, Speaker, Playlist, Seeker, GUI } from './components'
@@ -43,12 +42,12 @@ class Player {
    */
   async load (threadUrl) {
     const [,, board, threadNo, fragment] = regex.thread.exec(threadUrl)
-    let res
+    let data
 
     this._playlist.flash('Loading...')
 
     try {
-      res = await axios.get(`/enqueue/${board}/thread/${threadNo}`)
+      data = await fetch(`/enqueue/${board}/thread/${threadNo}`).then((r) => r.json())
     } catch (err) {
       this._playlist.flash('Failed to get thread data, are you sure it exists?')
       console.error(err)
@@ -56,14 +55,14 @@ class Player {
       return
     }
 
-    const collect = collector(res.data.videos)
+    const collect = collector(data.videos)
 
     this._webmUrls = collect('url')
     this._filenames = collect('filename')
     this._playlist.gen(
       this._filenames,
       collect('thumbnail'),
-      res.data.subject,
+      data.subject,
       (i) => this.play(i, false)
     )
 
@@ -73,7 +72,7 @@ class Player {
 
     document.title = [
       `/${board}/`,
-      res.data.subject,
+      data.subject,
       boards.getName(board),
       '4vids'
     ].join(' - ')
